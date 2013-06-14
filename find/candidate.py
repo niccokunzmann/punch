@@ -38,7 +38,7 @@ def test_answer_ping(host = socket.gethostbyname(socket.gethostname())):
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
-        args = (sys.argv[1],)
+        args = (socket.gethostbyname(sys.argv[1]),)
     else:
         args = ()
     test_answer_ping(*args)#'1.2.3.4')
