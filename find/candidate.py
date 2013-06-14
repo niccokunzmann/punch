@@ -5,7 +5,7 @@ import socket
 
 class Candidate:
 
-    Packet = icmp.Unreachable
+    Packet = icmp.EchoReply
 
     def __init__(self, addr):
         self.sock = raw_socket.RawSocket(addr)

@@ -14,7 +14,8 @@ class Finder(candidate.Candidate):
             rd, wt, er = select.select([self.sock.socket], [], [], 0)
             if rd:
                 pkt, who = self.sock.recvfrom(4096)
-                candidates.append(who[0])
+                if who[0] != self.addr:
+                    candidates.append(who[0])
             else:
                 break
         return candidates

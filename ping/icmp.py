@@ -98,38 +98,20 @@ class Packet:
         sum = sum + (sum >> 16)
         return (~sum) & 0xffff
         
+def get_packet_class(name, TYPE):
+    class _Packet(Packet):    
+        def __init__(self, packet=None, cksum=1):
+            Packet.__init__(self, packet, cksum)
+            if packet:
+                if self.type != TYPE:
+                    raise ValueError("supplied packet of wrong type")
+            else:
+                self.type = TYPE
+                self.id = self.seq = 0
+    _Packet.__name__ = name
+    return _Packet
 
-class TimeExceeded(Packet):
-    
-    def __init__(self, packet=None, cksum=1):
-        Packet.__init__(self, packet, cksum)
-        if packet:
-            if self.type != ICMP_TIMXCEED:
-                raise ValueError("supplied packet of wrong type")
-        else:
-            self.type = ICMP_TIMXCEED
-            self.id = self.seq = 0
-
-class Echo(Packet):
-    
-    def __init__(self, packet=None, cksum=1):
-        Packet.__init__(self, packet, cksum)
-        if packet:
-            if self.type != ICMP_ECHO:
-                raise ValueError("supplied packet of wrong type")
-        else:
-            self.type = ICMP_ECHO
-            self.id = self.seq = 0
-
-class Unreachable(Packet):
-    
-    def __init__(self, packet=None, cksum=1):
-        Packet.__init__(self, packet, cksum)
-        if packet:
-            if self.type != ICMP_UNREACH:
-                raise ValueError("supplied packet of wrong type")
-        else:
-            self.type = ICMP_UNREACH
-            self.id = self.seq = 0
-
-        
+TimeExceeded = get_packet_class('TimeExceeded', ICMP_TIMXCEED)
+Echo = get_packet_class('Echo', ICMP_ECHO)
+EchoReply = get_packet_class('EchoReply', ICMP_ECHOREPLY)
+Unreachable = get_packet_class('Unreachable', ICMP_UNREACH)
