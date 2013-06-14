@@ -33,3 +33,10 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+/ping/RCS/icmp.py,v
+/ping/RCS/inet.py,v
+/ping/RCS/ip.py,v
+/ping/RCS/ping.py,v
+/ping/RCS/traceroute.py,v
+/ping/RCS/udp.py,v
