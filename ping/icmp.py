@@ -4,7 +4,7 @@
 # Copyright 1997, Corporation for National Research Initiatives
 # written by Jeremy Hylton, jeremy@cnri.reston.va.us
 
-import punch.ping.inet
+import punch.ping.inet as inet
 import array
 import struct
 
@@ -52,7 +52,7 @@ class Packet:
             self.cksum = 0
             self.id = 0
             self.seq = 0
-            self.data = ''
+            self.data = b''
 
     def __repr__(self):
         return "<ICMP packet %d %d %d %d>" % (self.type, self.code,
@@ -60,11 +60,11 @@ class Packet:
 
     def assemble(self, cksum=1):
         idseq = struct.pack('hh', self.id, self.seq)
-        packet = chr(self.type) + chr(self.code) + '\000\000' + idseq \
+        packet = bytes([self.type, self.code]) + b'\000\000' + idseq \
                  + self.data
         if cksum:
             self.cksum = inet.cksum(packet)
-            packet = chr(self.type) + chr(self.code) \
+            packet = bytes([self.type, self.code]) \
                      + struct.pack('h', self.cksum) + idseq + self.data
         # Don't need to do any byte-swapping, because idseq is
         # appplication defined and others are single byte values.
@@ -77,7 +77,7 @@ class Packet:
             if our_cksum != 0:
                 raise ValueError(packet)
 
-        self.type = ord(packet[0])
+        self.type = ord(packet[0]) # if ord fails remove it: packet is bytes
         self.code = ord(packet[1])
         elts = struct.unpack('hhh', packet[2:8])
         [self.cksum, self.id, self.seq] = map(lambda x:x & 0xffff, elts)
@@ -108,6 +108,17 @@ class TimeExceeded(Packet):
                 raise ValueError("supplied packet of wrong type")
         else:
             self.type = ICMP_TIMXCEED
+            self.id = self.seq = 0
+
+class Echo(Packet):
+    
+    def __init__(self, packet=None, cksum=1):
+        Packet.__init__(self, packet, cksum)
+        if packet:
+            if self.type != ICMP_ECHO:
+                raise ValueError("supplied packet of wrong type")
+        else:
+            self.type = ICMP_ECHO
             self.id = self.seq = 0
 
 class Unreachable(Packet):

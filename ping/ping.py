@@ -58,7 +58,7 @@ class Pinger:
         pkt.type = icmp.ICMP_ECHO
         pkt.id = self.pid
         pkt.seq = self.sent
-        pkt.data = 'python pinger'
+        pkt.data = b'python pinger'
         buf = pkt.assemble()
         self.times[self.sent] = time.time()
         self.sock.sendto(buf)
