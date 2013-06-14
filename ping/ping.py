@@ -9,7 +9,8 @@ Uses ICMP ECHO_REQEST messages to measure the delay between two
 Internet hosts.
 """
 
-import icmp, ip
+import punch.ping.icmp as icmp
+import punch.ping.ip as ip
 import socket
 import time
 import select

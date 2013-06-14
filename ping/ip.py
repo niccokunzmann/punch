@@ -5,7 +5,7 @@
 # written by Jeremy Hylton, jeremy@cnri.reston.va.us
 
 
-import inet
+import punch.ping.inet as inet
 import socket
 import struct
 import string

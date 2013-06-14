@@ -4,7 +4,7 @@
 # Copyright 1997, Corporation for National Research Initiatives
 # written by Jeremy Hylton, jeremy@cnri.reston.va.us
 
-import inet
+import punch.ping.inet
 import array
 import struct
 
